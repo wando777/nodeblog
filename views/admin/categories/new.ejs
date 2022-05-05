@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ('../../partials/header') %>
+</head>
+
+<body>
+    <%- include ('../../partials/navbar') %>
+        <div class="container"><br>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Creating a new category</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/categories/save">
+                        <input type="text" name="title" placeholder="Set the category name">
+                        <button class="btn btn-success">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</body>
+<%- include ('../../partials/footer') %>
+
+</html>
