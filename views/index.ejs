@@ -4,10 +4,32 @@
 <head>
     <%- include ('partials/header') %>
 </head>
+<%- include ('partials/homenavbar') %>
 
 <body>
-
-    <h1>Testing my view</h1>
+    <div class="container"><br>
+        <div class="jumbotron">
+            <h1 class="display-4">Hello, there :) </h1>
+            <p class="lead">This is my blog example developed using nodeJS.</p>
+            <hr class="my-4">
+            <p>It uses express and sequelize</p>
+            <p class="lead">
+              <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            </p>
+        </div>
+        <hr>
+        <% articles.forEach(article => { %>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <h3><%= article.title %></h3>
+                </div>
+                <div class="card-body">
+                    <a href="/<%= article.slug %>" class="btn btn-success">Read article</a>
+                </div>
+            </div>
+        <% }) %>
+    </div>
 
 </body>
 <%- include ('partials/footer') %>

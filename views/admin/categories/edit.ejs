@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ('../../partials/header') %>
+</head>
+
+<body>
+    <%- include ('../../partials/navbar') %>
+        <div class="container"><br>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Editing a category</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/categories/update">
+                        <input type="text" name="title" placeholder="Set the category name"
+                            value="<%= category.title %>">
+                        <input type="hidden" name="idFromEdit" value="<%= category.id %>">
+                        <button class="btn btn-success">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</body>
+<%- include ('../../partials/footer') %>
+
+</html>

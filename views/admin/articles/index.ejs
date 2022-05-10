@@ -9,9 +9,9 @@
     <%- include ('../../partials/navbar') %>
         <div class="container">
             <hr>
-            <h2>Categories</h2>
-            <button class="btn btn-primary" onclick="window.location.href='/admin/categories/new'">Create a new
-                category</button>
+            <h2>Articles</h2>
+            <button class="btn btn-primary" onclick="window.location.href='/admin/articles/new'">Create a new
+                article</button>
             <hr>
             <table class="table table-bordered">
                 <thead>
@@ -19,31 +19,35 @@
                         <th>Id</th>
                         <th>Title</th>
                         <th>Slug</th>
+                        <th>Category</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% categories.forEach(category=> { %>
+                    <% articles.forEach(article=> { %>
                         <tr>
-                            <th>
-                                <%= category.id %>
-                            </th>
-                            <th>
-                                <%= category.title %>
-                            </th>
-                            <th>
-                                <%= category.slug %>
-                            </th>
-                            <th>
+                            <td>
+                                <%= article.id %>
+                            </td>
+                            <td>
+                                <%= article.title %>
+                            </td>
+                            <td>
+                                <%= article.slug %>
+                            </td>
+                            <td>
+                                <%= article.category.title %>
+                            </td>
+                            <td>
                                 <button class="btn btn-warning"
-                                    onclick="window.location.href='/admin/categories/edit/<%= category.id %>'">Edit
+                                    onclick="window.location.href='/admin/articles/edit/<%= article.id %>'">Edit
                                 </button>
-                                <form method="POST" action="/categories/delete" style="display: inline;"
+                                <form method="POST" action="/articles/delete" style="display: inline;"
                                     onsubmit="whenDeleting(event, this)">
-                                    <input type="hidden" name="idInput" value="<%= category.id %>">
+                                    <input type="hidden" name="idInput" value="<%= article.id %>">
                                     <button class="btn btn-danger">Delete</button>
                                 </form>
-                            </th>
+                            </td>
                         </tr>
                         <% }) %>
                 </tbody>
@@ -55,7 +59,7 @@
     <script>
         function whenDeleting(event, form) {
             event.preventDefault();
-            var decision = confirm("Do you really want to delete this category?");
+            var decision = confirm("Do you really want to delete this article?");
             if (decision) {
                 form.submit();
             }
