@@ -53,6 +53,72 @@ router.post("/articles/delete", (req, res) => {
     }
 });
 
+router.get("/admin/articles/edit/:id", (req, res) => {
+    var idPage = req.params.id;
 
+    Article.findByPk(idPage).then(article => {
+        if (article != undefined && !isNaN(idPage)) {
+
+            //Passing category to list all categories in a dropdown
+            Category.findAll().then(categories => {
+                res.render("admin/articles/edit", { article: article, categories: categories })
+            });
+
+        } else {
+            res.redirect("/admin/articles")
+        }
+    }).catch(error => {
+        res.redirect("/admin/articles");
+    })
+});
+
+router.post("/articles/update", (req, res) => {
+    var id = req.body.idHidden;
+    var title = req.body.title;
+    var body = req.body.body;
+    var category = req.body.categoryArticle;
+    Article.update({ title: title, body: body, categoryId: category, slug: slugify(title) }, {
+        where: { id: id }
+    }).then(() => {
+        res.redirect("/admin/articles");
+    }).catch(error => {
+        res.redirect("/");
+    });
+});
+
+router.get("/articles/page/:num", (req, res) => {
+    var page = req.params.num;
+    var offSet = 0;
+    var pageLimit = 2;
+
+    if (!isNaN(page) || page != 0) {
+        offSet = parseInt(page) * pageLimit;
+    }
+
+    Article.findAndCountAll({
+        limit: pageLimit,
+        offset: offSet,
+        order: [
+            ['id', 'DESC']
+        ]
+    }).then(articles => {
+
+        var next = true;
+        if (offSet + pageLimit >= articles.count) {
+            next = false
+        }
+        // console.log(parseInt(page));
+        var result = {
+            page: parseInt(page),
+            next: next,
+            articles: articles
+        }
+
+        Category.findAll().then(categories =>{
+            res.render("admin/articles/page", {result: result, categories: categories})
+        });
+
+    });
+})
 
 module.exports = router;

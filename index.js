@@ -8,6 +8,8 @@ const Category = require("./categories/Category");
 const categoriesController = require("./categories/categoriesController");
 const Article = require("./articles/Article");
 const articlesController = require("./articles/articlesController");
+const User = require("./users/User");
+const usersController = require("./users/usersController");
 const res = require("express/lib/response");
 
 //View engine
@@ -34,13 +36,15 @@ connection
 //calling controllers
 app.use("/", categoriesController);
 app.use("/", articlesController);
+app.use("/", usersController);
 
 
 app.get("/", (req, res) => {
     Article.findAll({
         order: [
             ['id', 'DESC']
-        ]
+        ],
+        limit: 2 //It limits the number of articles in the homepage
     }).then(articles => {
         getAllCategoriesThenRender("index", articles, res, req)
     });
@@ -61,10 +65,29 @@ app.get("/:slug", (req, res) => {
     })
 });
 
+app.get("/category/:slug", (req, res) => {
+    var slugFromPage = req.params.slug;
+    Category.findOne({
+        where: {
+            slug: slugFromPage
+        },
+        include: [{
+            model: Article
+        }]
+    }).then(category => {
+        if (category != undefined) {
+            getAllCategoriesThenRender("index", category.articles, res, req);
+        } else {
+            res.redirect("/");
+        }
+    })
+
+});
+
 function getAllCategoriesThenRender(view, articles, res, req) {
 
     Category.findAll().then(categories => {
-        res.render(view, {articles: articles, categories: categories});
+        res.render(view, { articles: articles, categories: categories });
     });
     // Category.findAll().then(categories => {
     //     res.render("index", { articles: articles, categories: categories });
