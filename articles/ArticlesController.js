@@ -4,9 +4,10 @@ const router = express.Router();
 const Category = require("../categories/Category");
 const Article = require("./Article");
 const slugify = require("slugify");
+const adminAuth = require("../middlewares/adminAuth");
 
 
-router.get("/admin/articles", (req, res) => {
+router.get("/admin/articles", adminAuth, (req, res) => {
     Article.findAll({
         include: [{ model: Category }]
     }).then(articleFromDb => {
@@ -14,14 +15,14 @@ router.get("/admin/articles", (req, res) => {
     });
 });
 
-router.get("/admin/articles/new", (req, res) => {
+router.get("/admin/articles/new", adminAuth, (req, res) => {
     //Passing category to list all categories in a dropdown
     Category.findAll().then(categories => {
         res.render("admin/articles/new", { categories: categories })
     });
 });
 
-router.post("/articles/save", (req, res) => {
+router.post("/articles/save", adminAuth, (req, res) => {
     var titlePage = req.body.title;
     var bodyPage = req.body.body;
     var categoryPage = req.body.categoryArticle;
@@ -40,7 +41,7 @@ router.post("/articles/save", (req, res) => {
     })
 });
 
-router.post("/articles/delete", (req, res) => {
+router.post("/articles/delete", adminAuth, (req, res) => {
     var idPage = req.body.idInput;
     if (idPage != undefined && !isNaN(idPage)) {
         Article.destroy({
@@ -53,7 +54,7 @@ router.post("/articles/delete", (req, res) => {
     }
 });
 
-router.get("/admin/articles/edit/:id", (req, res) => {
+router.get("/admin/articles/edit/:id", adminAuth, (req, res) => {
     var idPage = req.params.id;
 
     Article.findByPk(idPage).then(article => {
@@ -72,7 +73,7 @@ router.get("/admin/articles/edit/:id", (req, res) => {
     })
 });
 
-router.post("/articles/update", (req, res) => {
+router.post("/articles/update", adminAuth, (req, res) => {
     var id = req.body.idHidden;
     var title = req.body.title;
     var body = req.body.body;
@@ -114,8 +115,8 @@ router.get("/articles/page/:num", (req, res) => {
             articles: articles
         }
 
-        Category.findAll().then(categories =>{
-            res.render("admin/articles/page", {result: result, categories: categories})
+        Category.findAll().then(categories => {
+            res.render("admin/articles/page", { result: result, categories: categories })
         });
 
     });

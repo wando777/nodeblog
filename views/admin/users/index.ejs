@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ('../../partials/header') %>
+</head>
+
+<body>
+    <%- include ('../../partials/navbar') %>
+        <div class="container">
+            <hr>
+            <h2>Users</h2>
+            <button class="btn btn-primary" onclick="window.location.href='/admin/users/create'">Create a new
+                user</button>
+            <hr>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user=> { %>
+                        <tr>
+                            <td>
+                                <%=user.id%>
+                            </td>
+                            <td>
+                                <%=user.login%>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+</body>
+
+<%- include ('../../partials/footer') %>
+
+</html>

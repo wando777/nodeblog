@@ -2,6 +2,7 @@ const express = require("express");
 const req = require("express/lib/request");
 const app = express();
 const connection = require("./database/database");
+const session = require('express-session');
 
 //const bodyParser = require("body-parser");
 const Category = require("./categories/Category");
@@ -14,6 +15,14 @@ const res = require("express/lib/response");
 
 //View engine
 app.set('view engine', 'ejs');
+
+//Sessions
+app.use(session({
+    secret: "imposto eh roubo",
+    cookie: {
+        maxAge: 777777777
+    }
+}));
 
 // statics for using css and etc
 app.use(express.static('public'));
@@ -38,6 +47,14 @@ app.use("/", categoriesController);
 app.use("/", articlesController);
 app.use("/", usersController);
 
+/*Session routes to use sessions in my local server*/ 
+// app.get("/session", (req, res) => {
+
+// });
+
+// app.get("/read", (req, res) => {
+
+// })
 
 app.get("/", (req, res) => {
     Article.findAll({
